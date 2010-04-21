@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 20, 2010 at 10:56 PM
+-- Generation Time: Apr 21, 2010 at 05:38 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -24,7 +24,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- Table structure for table `access_levels`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `access_levels`;
 CREATE TABLE IF NOT EXISTS `access_levels` (
   `id` int(2) unsigned NOT NULL AUTO_INCREMENT,
   `description` char(20) NOT NULL,
@@ -46,7 +49,10 @@ INSERT INTO `access_levels` (`id`, `description`) VALUES
 --
 -- Table structure for table `business_customers`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `business_customers`;
 CREATE TABLE IF NOT EXISTS `business_customers` (
   `customer_id` int(8) unsigned NOT NULL,
   `business_name` varchar(50) NOT NULL,
@@ -54,6 +60,12 @@ CREATE TABLE IF NOT EXISTS `business_customers` (
   `url` char(20) DEFAULT NULL,
   KEY `customer_id` (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELATIONS FOR TABLE `business_customers`:
+--   `customer_id`
+--       `customers` -> `id`
+--
 
 --
 -- Dumping data for table `business_customers`
@@ -67,7 +79,10 @@ INSERT INTO `business_customers` (`customer_id`, `business_name`, `contact_title
 --
 -- Table structure for table `customers`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `customers`;
 CREATE TABLE IF NOT EXISTS `customers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `first_name` char(15) NOT NULL,
@@ -91,16 +106,19 @@ CREATE TABLE IF NOT EXISTS `customers` (
 --
 
 INSERT INTO `customers` (`id`, `first_name`, `last_name`, `email`, `street`, `suite`, `city`, `state`, `zipcode`, `type`, `status`, `last_access`, `password`) VALUES
-(1, 'John', 'Hancock', 'j.hancock@google.com', '100 North Ave', NULL, 'Chicago', 'IL', '60605', 'b', 'a', '2010-04-20 18:35:10', 'password');
+(1, 'John', 'Hancock', 'j.hancock@google.com', '100 North Ave', NULL, 'Chicago', 'IL', '60605', 'b', 'a', '2010-04-21 17:30:12', 'password');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `customer_complaints`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `customer_complaints`;
 CREATE TABLE IF NOT EXISTS `customer_complaints` (
-  `id` int(8) unsigned NOT NULL,
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(8) unsigned NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `title` varchar(100) NOT NULL,
@@ -108,19 +126,30 @@ CREATE TABLE IF NOT EXISTS `customer_complaints` (
   `status` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `customer_id` (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- RELATIONS FOR TABLE `customer_complaints`:
+--   `customer_id`
+--       `customers` -> `id`
+--
 
 --
 -- Dumping data for table `customer_complaints`
 --
 
+INSERT INTO `customer_complaints` (`id`, `customer_id`, `time`, `title`, `details`, `status`) VALUES
+(1, 1, '2010-04-21 13:36:20', 'Delayed Shipping', 'It was estimated that my order would arrive within a week but this was not the case because it took about 2 weeks.\r\n\r\nLuckily the requested items were not time sensitive. I will be forced to take my business elsewhere if this happens again.', 1);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `customer_discounts`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `customer_discounts`;
 CREATE TABLE IF NOT EXISTS `customer_discounts` (
   `discount_id` int(8) unsigned NOT NULL,
   `customer_id` int(8) unsigned NOT NULL,
@@ -132,6 +161,16 @@ CREATE TABLE IF NOT EXISTS `customer_discounts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- RELATIONS FOR TABLE `customer_discounts`:
+--   `discount_id`
+--       `discounts` -> `id`
+--   `customer_id`
+--       `customers` -> `id`
+--   `employee_id`
+--       `employees` -> `id`
+--
+
+--
 -- Dumping data for table `customer_discounts`
 --
 
@@ -141,7 +180,10 @@ CREATE TABLE IF NOT EXISTS `customer_discounts` (
 --
 -- Table structure for table `customer_leads`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `customer_leads`;
 CREATE TABLE IF NOT EXISTS `customer_leads` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `employee_id` int(8) unsigned NOT NULL,
@@ -156,6 +198,16 @@ CREATE TABLE IF NOT EXISTS `customer_leads` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
+-- RELATIONS FOR TABLE `customer_leads`:
+--   `lead_id`
+--       `leads` -> `id`
+--   `customer_id`
+--       `customers` -> `id`
+--   `employee_id`
+--       `employees` -> `id`
+--
+
+--
 -- Dumping data for table `customer_leads`
 --
 
@@ -165,7 +217,10 @@ CREATE TABLE IF NOT EXISTS `customer_leads` (
 --
 -- Table structure for table `customer_orders`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `customer_orders`;
 CREATE TABLE IF NOT EXISTS `customer_orders` (
   `id` int(8) unsigned NOT NULL,
   `customer_id` int(8) unsigned NOT NULL,
@@ -178,6 +233,14 @@ CREATE TABLE IF NOT EXISTS `customer_orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- RELATIONS FOR TABLE `customer_orders`:
+--   `customer_id`
+--       `customers` -> `id`
+--   `service_id`
+--       `services` -> `id`
+--
+
+--
 -- Dumping data for table `customer_orders`
 --
 
@@ -187,7 +250,10 @@ CREATE TABLE IF NOT EXISTS `customer_orders` (
 --
 -- Table structure for table `discounts`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `discounts`;
 CREATE TABLE IF NOT EXISTS `discounts` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(100) NOT NULL,
@@ -200,6 +266,12 @@ CREATE TABLE IF NOT EXISTS `discounts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
+-- RELATIONS FOR TABLE `discounts`:
+--   `employee_id`
+--       `employees` -> `id`
+--
+
+--
 -- Dumping data for table `discounts`
 --
 
@@ -209,7 +281,10 @@ CREATE TABLE IF NOT EXISTS `discounts` (
 --
 -- Table structure for table `employees`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `employees`;
 CREATE TABLE IF NOT EXISTS `employees` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `first_name` char(15) NOT NULL,
@@ -229,19 +304,28 @@ CREATE TABLE IF NOT EXISTS `employees` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
+-- RELATIONS FOR TABLE `employees`:
+--   `access_level`
+--       `access_levels` -> `id`
+--
+
+--
 -- Dumping data for table `employees`
 --
 
 INSERT INTO `employees` (`id`, `first_name`, `last_name`, `email`, `street`, `suite`, `city`, `state`, `zipcode`, `last_access`, `password`, `access_level`) VALUES
-(1, 'Admini', 'Strator', 'admin@pcrs.com', '3420 S Cottage Grove', '1105', 'Chicago', 'IL', '60616', '2010-04-20 20:28:31', 'password4', 4),
-(2, 'Sally', 'Pearson', 'pearson@pcrs.com', '232 Fullerton', '112B', 'Chicago', 'IL', '60632', '2010-04-19 11:20:18', 'password3', 3);
+(1, 'Admini', 'Strator', 'admin@pcrs.com', '3420 S Cottage Grove', '1105', 'Chicago', 'IL', '60616', '2010-04-21 17:35:02', 'password', 4),
+(2, 'Sally', 'Pearson', 'pearson@pcrs.com', '232 Fullerton', '112B', 'Chicago', 'IL', '60632', '2010-04-19 11:20:18', 'password', 3);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `leads`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `leads`;
 CREATE TABLE IF NOT EXISTS `leads` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `description` char(20) NOT NULL,
@@ -258,7 +342,10 @@ CREATE TABLE IF NOT EXISTS `leads` (
 --
 -- Table structure for table `services`
 --
+-- Creation: Apr 21, 2010 at 01:15 PM
+--
 
+DROP TABLE IF EXISTS `services`;
 CREATE TABLE IF NOT EXISTS `services` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `description` char(20) NOT NULL,

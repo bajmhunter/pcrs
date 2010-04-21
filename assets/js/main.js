@@ -10,7 +10,7 @@ google.setOnLoadCallback( function() {
 $(function(){ main() });
 
 function main(){
-	$("#complaints").tabs();
+
 }
 
 //reference: will be needed for each instance

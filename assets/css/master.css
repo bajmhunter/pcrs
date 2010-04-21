@@ -237,7 +237,7 @@ p{margin-bottom:15px}
 	color:#fff;
 }
 
-.clearall{clear:both;}
+.clearall, .tab-content{clear:both;}
 
 .form1 li{
 	display:block;
@@ -261,8 +261,8 @@ input[type=submit], input[type=button]{
 	background: #ccc;
 	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
 	-moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 	font-family: 'Myriad Pro', 'Verdana', sans-serif;
 	font-weight:bold;
 }
@@ -439,10 +439,16 @@ input[name=suite]{width: 80px;}
   text-align:center;
   padding:10px 0;
   -webkit-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
-	-moz-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
 }
 
 .message.error{
   background:#d51007;
   color:#fff;
+}
+
+#add-complaint-form{
+	background:#f6f6f6;
+	border-top:1px solid #ccc;
+	padding:20px;
 }

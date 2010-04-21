@@ -1,0 +1,1 @@
+<?php include('includes/_.php'); check_auth(); $_SESSION['view'] = 'Orders'; get_header();  ?><h1>Orders</h1><?php get_footer(); ?>

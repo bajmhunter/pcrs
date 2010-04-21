@@ -15,7 +15,7 @@
 <script type="text/javascript" src="assets/js/jquery.ui.js"></script>
 <script type="text/javascript" src="assets/js/main.js"></script>
 </head>
-<body>
+<body id="body">
 <div id="top">
 <div id="session_info">
 <?php echo $_SESSION['full_name'] ?> | <a href="profile.php">Profile</a> | <a href="auth.php?logout=1">Sign out</a>

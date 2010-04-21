@@ -11,26 +11,24 @@ $(function(){ main() });
 
 function main(){
 	$("#complaints").tabs();
-	//toggle_search_criteria();
-	date_fields();
 }
 
-function toggle_search_criteria(){
-	$('.table2').hide();
-	
-	$('.search-criteria-list li > a').click(function() {
-		$(this).next().toggle();
-		return false;
-	}).next().hide();
-}
-
+//reference: will be needed for each instance
 function date_fields(){
-	 $('.date-field').datepicker({changeMonth: true,
-			changeYear: true,
-                        dateFormat: 'yy-mm-dd',
-                        yearRange: '2000:'});
+	 $('.date-field').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'yy-mm-dd',
+        yearRange: '2000:'
+    });
 }
 
+function showMsg(str){
+  $('#body').append(str);
+  setTimeout( function(){ $('#body > .message').fadeOut('fast'),3000;},3000 );
+}
+
+//Captalize prototype
 String.prototype.capitalize = function(){
    return this.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
 };

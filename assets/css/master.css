@@ -32,7 +32,7 @@ p{margin-bottom:15px}
 	margin:8% auto;
 	width:360px;
 	padding:0;
-	background:url(../images/nav.png) 0 0 repeat-x #222;
+	background:#222;
 	border:0px solid #ccc;
 	-webkit-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
 	-moz-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
@@ -352,14 +352,16 @@ textarea{
 
 #edit-profile-link{
 	font-size:12px;
+  font-weight:normal;
 	background:#333;
 	color:#fff;
 	display:inline-block;
-	padding:2px 6px;
-	vertical-align:middle;
+	padding:1px 10px;
+  margin:8px 0 0px 10px;
 	text-decoration:none;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
+  vertical-align:top;
 }
 
 #edit-profile-link:hover{background:#d51007}
@@ -398,8 +400,6 @@ textarea{
 #activity-list .count.delta{
 	background: #d51007}
   
-#profile-h1{
-}
 
 .profile_sect{
   background:#f6f6f6;
@@ -411,13 +411,38 @@ textarea{
   border:1px solid #ddd;
   border-width:1px 0;
   padding:5px 10px;
+  font-size:1.1em;
 }
 
 .profile_sect .field{
   width: 150px;
-  font-weight:bold;
+  color:#333;
+  font-style: italic;
+  border-right:1px solid #ddd;
 }
 
-input[name=state]{
-  width: 2em;
+input[name=first_name],input[name=last_name],input[name=email]{
+  width: 200px;
+}
+input[name=street]{ width:300px; }
+input[name=suite]{width: 80px;}
+
+.message{
+  position: absolute;
+  z-index:10000;
+  top:0;
+  left:0;
+  width:100%;
+  background: #fff;
+  font-weight:bold;
+  font-size:1.4em;
+  text-align:center;
+  padding:10px 0;
+  -webkit-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+}
+
+.message.error{
+  background:#d51007;
+  color:#fff;
 }

@@ -105,12 +105,12 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
                             {
                                 if(State)
                                     {
-                                        Row.style.backgroundColor = 'Black';
-                                        Row.style.color = 'white';
+                                        Row.style.backgroundColor = '#E0E0E0';
+                                        Row.style.color = 'Black';
                                     }
                                 else
                                     {
-                                        Row.style.backgroundColor = 'white';
+                                        Row.style.backgroundColor = '#f6f6f6';
                                         Row.style.color = 'Black';
                                     }
                             }
@@ -124,8 +124,9 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
                         </head>
                         <body>
                         <h2>Select Customer to create Lead</h2>
+                        <div id='profileBox'></div>
                         <form action='$PHP_SELF' method='POST'>
-                            <table  align='center' id='leadsTable'>
+                            <table  align='center' id='leadsTable' class='profile_sect'>
                                 <tr align = 'center'>
                                     <th> &nbsp &nbsp Customer ID &nbsp &nbsp </th>
                                     <th> &nbsp &nbsp First Name &nbsp &nbsp </th>

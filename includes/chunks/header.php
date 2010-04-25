@@ -30,7 +30,34 @@
                     <li><a href="complaints.php"><span class="notice">17</span>Complaints</a></li>
                     <?php endif; ?>
 
-                    <li><a href="discounts.php">Discounts</a></li>
+                    <?php if( $_SESSION['access_level'] == 1 ) : ?>
+                    <li>
+                        <a href="#" onmouseover="menuOpen('offers')" onmouseout="menuCloseTimer()">Discounts</a>
+                           <div id="offers" onmouseover="menuCancelCloseTimer()" onmouseout="menuCloseTimer()">
+                               <a href ="viewOffers.php">View Offers</a>
+                           </div>
+                    </li>
+                    <?php endif; ?>
+
+                    <?php if( $_SESSION['access_level'] == 3 ) : ?>
+                    <li>
+                        <a href="#" onmouseover="menuOpen('offers')" onmouseout="menuCloseTimer()">Discounts</a>
+                           <div id="offers" onmouseover="menuCancelCloseTimer()" onmouseout="menuCloseTimer()">
+                               <a href ="viewOffers.php">View Offers</a>
+                               <a href ="offerDiscounts.php">Offer Discounts</a>
+                           </div>
+                    </li>
+                    <?php endif; ?>
+
+                    <?php if( $_SESSION['access_level'] == 4 ) : ?>
+                    <li>
+                        <a href="#" onmouseover="menuOpen('offers')" onmouseout="menuCloseTimer()">Discounts</a>
+                           <div id="offers" onmouseover="menuCancelCloseTimer()" onmouseout="menuCloseTimer()">
+                               <a href ="viewOffers.php">View Offers</a>
+                               <a href ="createOffer.php">Create Offers</a>
+                           </div>
+                    </li>
+                    <?php endif; ?>
 
                     <?php if( $_SESSION['access_level'] == 3 ) : ?>
                      <li><a href="#" onmouseover="menuOpen('leads')" onmouseout="menuCloseTimer()">Leads</a>

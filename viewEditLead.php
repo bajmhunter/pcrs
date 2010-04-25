@@ -84,12 +84,12 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             {
                                 if(State)
                                     {
-                                        Row.style.backgroundColor = 'Black';
-                                        Row.style.color = 'white';
+                                        Row.style.backgroundColor = '#E0E0E0';
+                                        Row.style.color = 'Black';
                                     }
                                 else
                                     {
-                                        Row.style.backgroundColor = 'white';
+                                        Row.style.backgroundColor = '#f6f6f6';
                                         Row.style.color = 'Black';
                                     }
                             }
@@ -102,9 +102,10 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                         </script>
                         </head>
                         <body>
-                        <h5>Click to View / Update Lead</h5>
+                        <h3>Click to View / Update Lead</h3>
+                        <div id='profileBox'></div>
                         <form action='$PHP_SELF' method='POST'>
-                            <table  align='center' id='leadsTable'>
+                            <table  align='center' id='leadsTable' class='profile_sect'>
                                 <tr align = 'center'>
                                     <th> &nbsp &nbsp Lead ID &nbsp &nbsp </th>
                                     <th> &nbsp &nbsp Customer ID &nbsp &nbsp </th>

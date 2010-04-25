@@ -135,7 +135,11 @@ p{margin-bottom:15px}
 	color:#ff0;
 	text-shadow:0 0 2px #fff;
 }
-
+#nav div
+{	position: absolute;
+	visibility: hidden;
+	background:url(../images/nav.png) 0 0 repeat-x #222;
+}
 .notice{
 	position:absolute;
 	display:block;

@@ -1,90 +1,202 @@
-<<<<<<< local
--- phpMyAdmin SQL Dump
--- version 3.2.4
--- http://www.phpmyadmin.net
+-- MySQL dump 10.13  Distrib 5.1.43, for Win32 (ia32)
 --
--- Host: localhost
--- Generation Time: Apr 21, 2010 at 05:38 PM
--- Server version: 5.1.41
--- PHP Version: 5.3.1
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
+-- Host: localhost    Database: pcrs
+-- ------------------------------------------------------
+-- Server version	5.1.43-community
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
---
--- Database: `pcrs`
---
-
--- --------------------------------------------------------
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `access_levels`
 --
--- Creation: Apr 21, 2010 at 01:15 PM
---
 
 DROP TABLE IF EXISTS `access_levels`;
-CREATE TABLE IF NOT EXISTS `access_levels` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `access_levels` (
   `id` int(2) unsigned NOT NULL AUTO_INCREMENT,
   `description` char(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `access_levels`
 --
 
-INSERT INTO `access_levels` (`id`, `description`) VALUES
-(1, 'Customer'),
-(2, 'Employee'),
-(3, 'Sales'),
-(4, 'Manager');
-
--- --------------------------------------------------------
+LOCK TABLES `access_levels` WRITE;
+/*!40000 ALTER TABLE `access_levels` DISABLE KEYS */;
+INSERT INTO `access_levels` VALUES (1,'Customer'),(2,'Employee'),(3,'Sales'),(4,'Manager');
+/*!40000 ALTER TABLE `access_levels` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `business_customers`
 --
--- Creation: Apr 21, 2010 at 01:15 PM
---
 
 DROP TABLE IF EXISTS `business_customers`;
-CREATE TABLE IF NOT EXISTS `business_customers` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `business_customers` (
   `customer_id` int(8) unsigned NOT NULL,
   `business_name` varchar(50) NOT NULL,
   `contact_title` char(20) NOT NULL,
   `url` char(20) DEFAULT NULL,
-  KEY `customer_id` (`customer_id`)
+  KEY `customer_id` (`customer_id`),
+  CONSTRAINT `business_customers_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `business_customers`:
---   `customer_id`
---       `customers` -> `id`
---
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `business_customers`
 --
 
-INSERT INTO `business_customers` (`customer_id`, `business_name`, `contact_title`, `url`) VALUES
-(1, 'Google Inc.', 'Liason', 'http://google.com');
+LOCK TABLES `business_customers` WRITE;
+/*!40000 ALTER TABLE `business_customers` DISABLE KEYS */;
+INSERT INTO `business_customers` VALUES (1,'Google Inc.','Liason','http://google.com');
+/*!40000 ALTER TABLE `business_customers` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- --------------------------------------------------------
+--
+-- Table structure for table `customer_complaints`
+--
+
+DROP TABLE IF EXISTS `customer_complaints`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customer_complaints` (
+  `id` int(8) unsigned NOT NULL,
+  `customer_id` int(8) unsigned NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` varchar(100) NOT NULL,
+  `details` text NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  CONSTRAINT `customer_complaints_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_complaints`
+--
+
+LOCK TABLES `customer_complaints` WRITE;
+/*!40000 ALTER TABLE `customer_complaints` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_complaints` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_discounts`
+--
+
+DROP TABLE IF EXISTS `customer_discounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customer_discounts` (
+  `discount_id` int(8) unsigned NOT NULL,
+  `customer_id` int(8) unsigned NOT NULL,
+  `employee_id` int(8) unsigned NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`discount_id`,`customer_id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `employee_id` (`employee_id`),
+  CONSTRAINT `customer_discounts_ibfk_1` FOREIGN KEY (`discount_id`) REFERENCES `discounts` (`id`),
+  CONSTRAINT `customer_discounts_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
+  CONSTRAINT `customer_discounts_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_discounts`
+--
+
+LOCK TABLES `customer_discounts` WRITE;
+/*!40000 ALTER TABLE `customer_discounts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_discounts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_leads`
+--
+
+DROP TABLE IF EXISTS `customer_leads`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customer_leads` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `employee_id` int(8) unsigned NOT NULL,
+  `customer_id` int(8) unsigned NOT NULL,
+  `lead_id` int(8) unsigned NOT NULL,
+  `rank` int(1) unsigned NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `lead_id` (`lead_id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `employee_id` (`employee_id`),
+  CONSTRAINT `customer_leads_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`),
+  CONSTRAINT `customer_leads_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
+  CONSTRAINT `customer_leads_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_leads`
+--
+
+LOCK TABLES `customer_leads` WRITE;
+/*!40000 ALTER TABLE `customer_leads` DISABLE KEYS */;
+INSERT INTO `customer_leads` VALUES (1,2,1,1,1,'2010-04-24 08:30:43'),(2,2,2,2,1,'2010-04-24 08:31:21'),(3,2,2,3,1,'2010-04-24 08:31:45'),(4,2,1,4,1,'2010-04-24 08:34:19'),(5,2,2,5,1,'2010-04-24 08:41:59'),(6,2,2,6,1,'2010-04-24 08:45:59'),(7,2,2,7,1,'2010-04-24 08:48:22'),(8,2,2,8,1,'2010-04-24 08:48:43'),(9,2,1,9,1,'2010-04-24 08:49:18'),(10,2,1,10,1,'2010-04-24 08:59:25'),(11,2,1,11,1,'2010-04-24 09:00:58'),(12,2,1,12,1,'2010-04-24 09:05:48'),(13,2,1,13,1,'2010-04-24 09:10:40'),(14,2,1,14,1,'2010-04-24 09:11:36'),(15,2,1,15,1,'2010-04-24 09:14:16'),(16,2,1,16,1,'2010-04-24 09:14:48'),(17,2,1,17,1,'2010-04-24 09:18:04'),(18,2,1,18,1,'2010-04-24 09:18:45'),(19,2,2,19,1,'2010-04-25 07:25:01');
+/*!40000 ALTER TABLE `customer_leads` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_orders`
+--
+
+DROP TABLE IF EXISTS `customer_orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customer_orders` (
+  `id` int(8) unsigned NOT NULL,
+  `customer_id` int(8) unsigned NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `service_id` int(8) unsigned NOT NULL,
+  `details` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `service_id` (`service_id`),
+  CONSTRAINT `customer_orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
+  CONSTRAINT `customer_orders_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_orders`
+--
+
+LOCK TABLES `customer_orders` WRITE;
+/*!40000 ALTER TABLE `customer_orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_orders` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `customers`
 --
--- Creation: Apr 21, 2010 at 01:15 PM
---
 
 DROP TABLE IF EXISTS `customers`;
-CREATE TABLE IF NOT EXISTS `customers` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `first_name` char(15) NOT NULL,
   `last_name` char(20) NOT NULL,
@@ -100,193 +212,59 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `password` char(12) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`id`, `first_name`, `last_name`, `email`, `street`, `suite`, `city`, `state`, `zipcode`, `type`, `status`, `last_access`, `password`) VALUES
-(1, 'John', 'Hancock', 'j.hancock@google.com', '100 North Ave', NULL, 'Chicago', 'IL', '60605', 'b', 'a', '2010-04-21 17:30:12', 'password');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customer_complaints`
---
--- Creation: Apr 21, 2010 at 01:15 PM
---
-
-DROP TABLE IF EXISTS `customer_complaints`;
-CREATE TABLE IF NOT EXISTS `customer_complaints` (
-  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `customer_id` int(8) unsigned NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `title` varchar(100) NOT NULL,
-  `details` text NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  KEY `customer_id` (`customer_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- RELATIONS FOR TABLE `customer_complaints`:
---   `customer_id`
---       `customers` -> `id`
---
-
---
--- Dumping data for table `customer_complaints`
---
-
-INSERT INTO `customer_complaints` (`id`, `customer_id`, `time`, `title`, `details`, `status`) VALUES
-(1, 1, '2010-04-21 13:36:20', 'Delayed Shipping', 'It was estimated that my order would arrive within a week but this was not the case because it took about 2 weeks.\r\n\r\nLuckily the requested items were not time sensitive. I will be forced to take my business elsewhere if this happens again.', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customer_discounts`
---
--- Creation: Apr 21, 2010 at 01:15 PM
---
-
-DROP TABLE IF EXISTS `customer_discounts`;
-CREATE TABLE IF NOT EXISTS `customer_discounts` (
-  `discount_id` int(8) unsigned NOT NULL,
-  `customer_id` int(8) unsigned NOT NULL,
-  `employee_id` int(8) unsigned NOT NULL,
-  `date` date NOT NULL,
-  PRIMARY KEY (`discount_id`,`customer_id`),
-  KEY `customer_id` (`customer_id`),
-  KEY `employee_id` (`employee_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `customer_discounts`:
---   `discount_id`
---       `discounts` -> `id`
---   `customer_id`
---       `customers` -> `id`
---   `employee_id`
---       `employees` -> `id`
---
-
---
--- Dumping data for table `customer_discounts`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customer_leads`
---
--- Creation: Apr 21, 2010 at 01:15 PM
---
-
-DROP TABLE IF EXISTS `customer_leads`;
-CREATE TABLE IF NOT EXISTS `customer_leads` (
-  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `employee_id` int(8) unsigned NOT NULL,
-  `customer_id` int(8) unsigned NOT NULL,
-  `lead_id` int(8) unsigned NOT NULL,
-  `rank` int(1) unsigned NOT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `lead_id` (`lead_id`),
-  KEY `customer_id` (`customer_id`),
-  KEY `employee_id` (`employee_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- RELATIONS FOR TABLE `customer_leads`:
---   `lead_id`
---       `leads` -> `id`
---   `customer_id`
---       `customers` -> `id`
---   `employee_id`
---       `employees` -> `id`
---
-
---
--- Dumping data for table `customer_leads`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customer_orders`
---
--- Creation: Apr 21, 2010 at 01:15 PM
---
-
-DROP TABLE IF EXISTS `customer_orders`;
-CREATE TABLE IF NOT EXISTS `customer_orders` (
-  `id` int(8) unsigned NOT NULL,
-  `customer_id` int(8) unsigned NOT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `service_id` int(8) unsigned NOT NULL,
-  `details` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `customer_id` (`customer_id`),
-  KEY `service_id` (`service_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `customer_orders`:
---   `customer_id`
---       `customers` -> `id`
---   `service_id`
---       `services` -> `id`
---
-
---
--- Dumping data for table `customer_orders`
---
-
-
--- --------------------------------------------------------
+LOCK TABLES `customers` WRITE;
+/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `customers` VALUES (1,'John','Hancock','j.hancock@google.com','100 North Ave',NULL,'Chicago','IL','60605','b','a','2010-04-25 10:39:46','password'),(2,'Peter','Hancock','p.Hancock@gmail.com','10 W 31st street','2 Rear','Chicago','IL','60616','b','a','2010-04-25 03:18:14','pass');
+/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `discounts`
 --
--- Creation: Apr 21, 2010 at 01:15 PM
---
 
 DROP TABLE IF EXISTS `discounts`;
-CREATE TABLE IF NOT EXISTS `discounts` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `discounts` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(100) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `value` int(3) unsigned NOT NULL,
   `employee_id` int(8) unsigned NOT NULL,
+  `value` double DEFAULT NULL,
+  `lead_type` char(15) NOT NULL,
+  `criteria` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `employee_id` (`employee_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- RELATIONS FOR TABLE `discounts`:
---   `employee_id`
---       `employees` -> `id`
---
+  KEY `employee_id` (`employee_id`),
+  CONSTRAINT `discounts_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `discounts`
 --
 
-
--- --------------------------------------------------------
+LOCK TABLES `discounts` WRITE;
+/*!40000 ALTER TABLE `discounts` DISABLE KEYS */;
+INSERT INTO `discounts` VALUES (1,'Visa Card Holders','2010-04-01','2010-04-21',2,10,'Sales','Visa Platinum'),(2,'Mastercard Customers','2010-04-22','2010-04-30',2,7.5,'Repair','Mastercard Gold'),(3,'Spring Sale!','2010-04-01','2010-05-15',2,7.5,'Sales','Visa,Amex,Mastercard');
+/*!40000 ALTER TABLE `discounts` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `employees`
 --
--- Creation: Apr 21, 2010 at 01:15 PM
---
 
 DROP TABLE IF EXISTS `employees`;
-CREATE TABLE IF NOT EXISTS `employees` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `employees` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `first_name` char(15) NOT NULL,
   `last_name` char(20) NOT NULL,
@@ -301,120 +279,77 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `access_level` int(8) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  KEY `access_level` (`access_level`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- RELATIONS FOR TABLE `employees`:
---   `access_level`
---       `access_levels` -> `id`
---
+  KEY `access_level` (`access_level`),
+  CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`access_level`) REFERENCES `access_levels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `employees`
 --
 
-INSERT INTO `employees` (`id`, `first_name`, `last_name`, `email`, `street`, `suite`, `city`, `state`, `zipcode`, `last_access`, `password`, `access_level`) VALUES
-(1, 'Admini', 'Strator', 'admin@pcrs.com', '3420 S Cottage Grove', '1105', 'Chicago', 'IL', '60616', '2010-04-21 17:35:02', 'password', 4),
-(2, 'Sally', 'Pearson', 'pearson@pcrs.com', '232 Fullerton', '112B', 'Chicago', 'IL', '60632', '2010-04-19 11:20:18', 'password', 3);
-
--- --------------------------------------------------------
+LOCK TABLES `employees` WRITE;
+/*!40000 ALTER TABLE `employees` DISABLE KEYS */;
+INSERT INTO `employees` VALUES (1,'Admini','Strator','admin@pcrs.com','3420 S Cottage Grove','1105','Chicago','IL','60616','2010-04-25 10:40:02','password4',4),(2,'Sally','Pearson','pearson@pcrs.com','232 Fullerton','3F','Chicago','IL','60632','2010-04-25 10:39:26','password3',3);
+/*!40000 ALTER TABLE `employees` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `leads`
 --
--- Creation: Apr 21, 2010 at 01:15 PM
---
 
 DROP TABLE IF EXISTS `leads`;
-CREATE TABLE IF NOT EXISTS `leads` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `leads` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `description` char(20) NOT NULL,
+  `description` char(100) NOT NULL,
+  `type` varchar(12) NOT NULL,
+  `status` varchar(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `leads`
 --
 
-
--- --------------------------------------------------------
+LOCK TABLES `leads` WRITE;
+/*!40000 ALTER TABLE `leads` DISABLE KEYS */;
+INSERT INTO `leads` VALUES (1,'HP Pavilion Laptop HDD Repair','Repair','Open'),(2,'MS Office 2007 Product Suite','Sales','Open'),(3,'Fedora Core 12','Installation','Open'),(4,'Laptop Fan','Repair','Open'),(5,'Desktop Monitor','Repair','Open'),(6,'Apple MacBook Pro','Sales','Open'),(7,'HP Pavilion Laptop Screen','Repair','Open'),(8,'HP Pavilion Laptop Screen','Repair','Open'),(9,'MS Windows 7','Installation','Open'),(10,'Sony Vaio Laptop','Sales','Open'),(11,'Sony Vaio - OS Crash','Repair','Open'),(12,'Something','Sales','Open'),(13,'Something','Sales','Open'),(14,'Something','Sales','Open'),(15,'Check Power cable dude','Repair','Open'),(16,'Check Power cable dude','Repair','Open'),(17,'Check it out','Sales','Open'),(18,'Check out','Sales','Open'),(19,'LOTR','Sales','Open');
+/*!40000 ALTER TABLE `leads` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `services`
 --
--- Creation: Apr 21, 2010 at 01:15 PM
---
 
 DROP TABLE IF EXISTS `services`;
-CREATE TABLE IF NOT EXISTS `services` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `services` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `description` char(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `services`
 --
 
+LOCK TABLES `services` WRITE;
+/*!40000 ALTER TABLE `services` DISABLE KEYS */;
+/*!40000 ALTER TABLE `services` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `business_customers`
---
-ALTER TABLE `business_customers`
-  ADD CONSTRAINT `business_customers_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `customer_complaints`
---
-ALTER TABLE `customer_complaints`
-  ADD CONSTRAINT `customer_complaints_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`);
-
---
--- Constraints for table `customer_discounts`
---
-ALTER TABLE `customer_discounts`
-  ADD CONSTRAINT `customer_discounts_ibfk_1` FOREIGN KEY (`discount_id`) REFERENCES `discounts` (`id`),
-  ADD CONSTRAINT `customer_discounts_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
-  ADD CONSTRAINT `customer_discounts_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`);
-
---
--- Constraints for table `customer_leads`
---
-ALTER TABLE `customer_leads`
-  ADD CONSTRAINT `customer_leads_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`),
-  ADD CONSTRAINT `customer_leads_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
-  ADD CONSTRAINT `customer_leads_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`);
-
---
--- Constraints for table `customer_orders`
---
-ALTER TABLE `customer_orders`
-  ADD CONSTRAINT `customer_orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
-  ADD CONSTRAINT `customer_orders_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`);
-
---
--- Constraints for table `discounts`
---
-ALTER TABLE `discounts`
-  ADD CONSTRAINT `discounts_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`);
-
---
--- Constraints for table `employees`
---
-ALTER TABLE `employees`
-  ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`access_level`) REFERENCES `access_levels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-=======
-Usage: mysqldump [OPTIONS] database [tables]
-OR     mysqldump [OPTIONS] --databases [OPTIONS] DB1 [DB2 DB3...]
-OR     mysqldump [OPTIONS] --all-databases [OPTIONS]
-For more options, use mysqldump --help
->>>>>>> other
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2010-04-25 16:56:23

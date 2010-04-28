@@ -70,11 +70,25 @@
                     <?php endif; ?>
 
                     <?php if( $_SESSION['access_level'] > 1 ) : ?>
-                    <li><a href="customers.php">Customers</a></li>
+                    <li><a href="#" onmouseover="menuOpen('customers')" onmouseout="menuCloseTimer()">Customers</a>
+                           <div id="customers" onmouseover="menuCancelCloseTimer()" onmouseout="menuCloseTimer()">
+                               <a href ="addCustomer.php">Add Customer</a>
+                               <a href ="searchCustomers.php">Search Customer(s)</a>
+                               <a href ="editCustomer.php">Edit Customer Information</a>
+                           </div>
+                    </li>
+
                     <?php endif; ?>
 
                     <?php if( $_SESSION['access_level'] == 4 ) : ?>
-                    <li><a href="employees.php">Employees</a></li>
+                     <li><a href="#" onmouseover="menuOpen('employees')" onmouseout="menuCloseTimer()">Employees</a>
+                           <div id="employees" onmouseover="menuCancelCloseTimer()" onmouseout="menuCloseTimer()">
+                               <a href ="addEmployee.php">Add Employee</a>
+                               <a href ="searchEmployees.php">Search Employee(s)</a>
+                               <a href ="editEmployee.php">Edit Employee Information</a>
+                           </div>
+                    </li>
+
                     <?php endif; ?>
                 </ul>
             </div>

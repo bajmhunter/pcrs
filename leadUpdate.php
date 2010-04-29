@@ -16,7 +16,9 @@
             $status = $_GET['status'];
             $desc = $_GET['description'];
             $leadiD = $_GET['lead_id'];
-            $db->runQuery("update leads set status='$status', description='$desc' where id = $leadiD");
+            $rank = $_GET['rank'];
+            $db->runQuery("update leads,customer_leads set status='$status', description='$desc', rank=$rank
+                    where leads.id = $leadiD and customer_leads.id = leads.id;");
             if($db->result)
             {
                 $_SESSION['msg'] = '<div class="message">Lead Updated!</div>';

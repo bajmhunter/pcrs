@@ -106,7 +106,7 @@ get_header();
                 </tr>
                 <tr><td><br/></td></tr>
                 <tr>
-                    <td>Criteria</td><td><input type='text' class='mid' name='criteria'/></td>
+                    <td>Criteria</td><td><input type='text' class='mid' name='criteria'/>&nbsp &nbsp[No of Leads]</td>
                 </tr>
                <tr><td><br/></td></tr>
                 <tr>

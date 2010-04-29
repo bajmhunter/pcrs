@@ -24,7 +24,15 @@
             <div id="nav">
                 <ul>
                     <li><a href="home.php">Home</a></li>
-                    <li><a href="orders.php">Orders</a></li>
+                    <?php if( $_SESSION['access_level'] == 1 ) : ?>
+                     <li>
+                        <a href="#" onmouseover="menuOpen('orders')" onmouseout="menuCloseTimer()">My Orders</a>
+                           <div id="orders" onmouseover="menuCancelCloseTimer()" onmouseout="menuCloseTimer()">
+                               <a href ="myOrders.php?status=Open">Open Orders</a>
+                               <a href ="myOrders.php?status=Closed">Past Orders</a>
+                           </div>
+                    </li>
+                    <?php endif;?>
 
                     <?php if( $_SESSION['access_level'] == 1 || $_SESSION['access_level'] == 4 ) : ?>
                     <li><a href="complaints.php"><span class="notice">17</span>Complaints</a></li>
@@ -34,7 +42,8 @@
                     <li>
                         <a href="#" onmouseover="menuOpen('offers')" onmouseout="menuCloseTimer()">Discounts</a>
                            <div id="offers" onmouseover="menuCancelCloseTimer()" onmouseout="menuCloseTimer()">
-                               <a href ="viewOffers.php">View Offers</a>
+                               <a href ="myOffers.php">My Offers</a>
+                               <a href ="viewOffers.php">View All Offers</a>
                            </div>
                     </li>
                     <?php endif; ?>

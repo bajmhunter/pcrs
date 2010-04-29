@@ -4,7 +4,7 @@
  $_SESSION['view'] = 'Leads';
 
  //only accessible to sales
- if ( $_SESSION['access_level'] != 3) {
+ if ( $_SESSION['access_level'] < 3) {
 	die('<h1>Unauthorized</h1>');
  }
 get_header();
@@ -37,14 +37,9 @@ get_header();
 
  }
 
- function errorNotFound()
- {
-    echo "<h5>ERROR: NOT found!</h5>";
-    echo '<br/><br/><form><input type="submit" value="Try Again" onClick="history.go(-1);return true;"> </form>';
- }
 
 
-if((!isset($_POST['submit1']))&& (!isset($_POST['submit2']))&& (!isset($_POST['leadID'])))
+if((!isset($_POST['submit1']))&& (!isset($_POST['submit2']))&& (!isset($_POST['leadID'])) && (!isset($_GET['status'])) && (!isset($_GET['error'])))
 {
 
 echo    "
@@ -54,7 +49,7 @@ echo    "
                     <form action= '$PHP_SELF' method='POST'>
                         <h1> Search Lead(s) to View / Update</h1><br/>
                         Search Criteria
-                        <select id='sType' name='sType'>
+                        <select id='sType' name='sType' onChange = showDatePicker('sType')>
                             <option value='lName'>Last Name</option>
                             <option value='fName'>First Name</option>
                             <option value='custID'> Customer ID</option>
@@ -64,15 +59,17 @@ echo    "
                             <option value='date'> Date </option>
                             <option value='eMail'>Customer e-Mail</option>
                         </select>
-                        <input type='text' name='sCriteria'>
+
+<input type='text' name='sCriteria'>
                         <input type='submit' value='Search' name='submit1'>
                     </form>
                 </body>
-            </html>";
+   
+</html>";
     get_footer();
         
         }
-if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['leadID'])))
+if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['leadID'])) && (!isset($_GET['status'])) && (!isset($_GET['error'])))
     {
      echo
                 "
@@ -136,7 +133,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                         }
                     else
                         {
-                            errorNotFound();
+                           echo"<script>location.href='viewEditLead.php?error=1'</script>";
                         }
                     break;
                     
@@ -155,7 +152,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                                echo"<script>location.href='viewEditLead.php?error=1'</script>";
                             }
                         break;
                     
@@ -173,7 +170,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                                echo"<script>location.href='viewEditLead.php?error=1'</script>";
                             }
                         break;
                     
@@ -191,7 +188,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                                echo"<script>location.href='viewEditLead.php?error=1'</script>";
                             }
                         break;
 
@@ -210,7 +207,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                                echo"<script>location.href='viewEditLead.php?error=1'</script>";
                             }
                         break;
                     
@@ -228,7 +225,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                               echo"<script>location.href='viewEditLead.php?error=1'</script>";
                             }
                         break;
                     
@@ -246,7 +243,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                                echo"<script>location.href='viewEditLead.php?error=1'</script>";
                             }
                         break;
 
@@ -264,13 +261,84 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                               echo"<script>location.href='viewEditLead.php?error=1'</script>";
                             }
                         break;
 
                 }
+
                 echo"</table></form></body></html>";
                 get_footer();
     }
 
-?>
+if (isset($_GET['status']) && (!isset($_GET['error'])))
+    {
+        $status = $_GET['status'];
+        //echo "<h1>$status</h1>";
+        echo "<html>
+                        <head>
+                        <meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
+                        <script type='text/javascript'>
+                            function changeRowColor (Row,State)
+                            {
+                                if(State)
+                                    {
+                                        Row.style.backgroundColor = '#E0E0E0';
+                                        Row.style.color = 'Black';
+                                    }
+                                else
+                                    {
+                                        Row.style.backgroundColor = '#f6f6f6';
+                                        Row.style.color = 'Black';
+                                    }
+                            }
+
+                            function pageRedirect(indexOfRow)
+                            {
+                                var lead = document.getElementById('leadsTable').rows[indexOfRow].cells[0].innerHTML;
+                                document.location.href = 'leadUpdate.php?leadID='+lead;
+
+                            }
+                        </script>
+                        </head>
+                        <body>
+                        <h3>Click to View / Update Lead</h3>
+                        <div id='profileBox'></div>
+                        <form action='$PHP_SELF' method='POST'>
+                            <table  align='center' id='leadsTable' class='profile_sect'>
+                                <tr align = 'center'>
+                                    <th> &nbsp &nbsp Lead ID &nbsp &nbsp </th>
+                                    <th> &nbsp &nbsp Customer ID &nbsp &nbsp </th>
+                                    <th> &nbsp &nbsp First Name &nbsp &nbsp </th>
+                                    <th> &nbsp &nbsp Last Name &nbsp &nbsp </th>
+                                    <th> &nbsp &nbsp e-Mail ID &nbsp &nbsp </th>
+                                    <th> &nbsp &nbsp Sales Person's ID &nbsp &nbsp </th>
+                                    <th> &nbsp &nbsp Date &nbsp &nbsp </th>
+                                    <th> &nbsp &nbsp Lead Type &nbsp &nbsp </th>
+                                </tr>
+                ";
+        switch($status)
+        {
+            case 'Open':
+                $db->runQuery("select CL.lead_id , CL.customer_id ,
+                            C.first_name, C.last_name ,C.email, CL.employee_id , date, L.type
+                            from customer_leads CL, customers C, Leads L where
+                            L.status = 'open' and L.id = CL.lead_id and C.id = CL.customer_id;");
+                break;
+            case 'Closed':
+                $db->runQuery("select CL.lead_id , CL.customer_id ,
+                            C.first_name, C.last_name ,C.email, CL.employee_id , date, L.type
+                            from customer_leads CL, customers C, Leads L where
+                            L.status = 'closed' and L.id = CL.lead_id and C.id = CL.customer_id;");
+            break;
+        }
+        
+        displayResults($db);
+       
+    }
+if (isset($_GET['error']))
+    {
+        echo "<h3>ERROR: Not found!</h3>";
+        echo '<br/><br/><form><input type="submit" value="Try Again" onClick="history.go(-1);return true;"> </form>';
+    }
+    ?>

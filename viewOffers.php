@@ -78,7 +78,11 @@ $db->runQuery(" select id as 'Offer ID', description as Description, value as Va
         /* show on-going offers */
 
 
-         
+         if(isset($_GET['offerDiscounts']))
+             echo"<h1>Select offer to see elgible customers</h1>";
+         else
+             echo"<h1>Ongoing Offers </h1>";
+
               echo"<form action='$PHP_SELF' method='POST'>
                         <table id ='offersTable' class='profile_sect' align='center'>
              ";
@@ -105,7 +109,7 @@ $db->runQuery(" select id as 'Offer ID', description as Description, value as Va
        
        $today = date("Y-m-d");
 
-       echo"<h1>Ongoing Offers </h1>";
+       
        while ($rows = $db->result->fetch_assoc())
        {
             $eDate = $rows['End Date'];

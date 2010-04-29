@@ -2,6 +2,8 @@
 
  include('includes/_.php');
  check_auth();
+ if( $_SESSION['access_level'] != 1)
+     die("<h1>Unauthorized! Only Customers Allowed</h1>");
  $_SESSION['view'] = 'My Offers';
  $uid = isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : $_SESSION['user_id'];
  if( $_SESSION['access_level'] == 1 && $_SESSION['user_id'] != $uid ) die("Unauthorized!");

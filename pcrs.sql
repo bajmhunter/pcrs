@@ -62,7 +62,7 @@ CREATE TABLE `business_customers` (
 
 LOCK TABLES `business_customers` WRITE;
 /*!40000 ALTER TABLE `business_customers` DISABLE KEYS */;
-INSERT INTO `business_customers` VALUES (1,'Google Inc.','Liason','http://google.com');
+INSERT INTO `business_customers` VALUES (1,'Google Inc.','Liason','http://google.com'),(13,'Apple Inc.','Steve Jobs','http://www.apple.com');
 /*!40000 ALTER TABLE `business_customers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,7 +155,7 @@ CREATE TABLE `customer_leads` (
 
 LOCK TABLES `customer_leads` WRITE;
 /*!40000 ALTER TABLE `customer_leads` DISABLE KEYS */;
-INSERT INTO `customer_leads` VALUES (1,2,1,1,1,'2010-04-24 08:30:43'),(2,2,2,2,1,'2010-04-24 08:31:21'),(3,2,2,3,1,'2010-04-24 08:31:45'),(4,2,1,4,1,'2010-04-24 08:34:19'),(5,2,2,5,1,'2010-04-24 08:41:59'),(6,2,2,6,1,'2010-04-24 08:45:59'),(7,2,2,7,1,'2010-04-24 08:48:22'),(8,2,2,8,1,'2010-04-24 08:48:43'),(9,2,1,9,1,'2010-04-24 08:49:18'),(10,2,1,10,1,'2010-04-24 08:59:25'),(11,2,1,11,1,'2010-04-24 09:00:58'),(12,2,1,12,1,'2010-04-24 09:05:48'),(13,2,1,13,1,'2010-04-24 09:10:40'),(14,2,1,14,1,'2010-04-24 09:11:36'),(15,2,1,15,1,'2010-04-24 09:14:16'),(16,2,1,16,1,'2010-04-24 09:14:48'),(17,2,1,17,1,'2010-04-24 09:18:04'),(18,2,1,18,1,'2010-04-24 09:18:45'),(19,2,2,19,1,'2010-04-25 07:25:01');
+INSERT INTO `customer_leads` VALUES (1,2,1,1,1,'2010-04-24 08:30:43'),(2,2,2,2,1,'2010-04-24 08:31:21'),(3,2,2,3,1,'2010-04-24 08:31:45'),(4,2,1,4,1,'2010-04-24 08:34:19'),(5,2,2,5,1,'2010-04-24 08:41:59'),(6,2,2,6,1,'2010-04-24 08:45:59'),(7,2,2,7,1,'2010-04-24 08:48:22'),(8,2,2,8,1,'2010-04-24 08:48:43'),(9,2,1,9,1,'2010-04-24 08:49:18'),(10,2,1,10,1,'2010-04-24 08:59:25'),(11,2,1,11,1,'2010-04-24 09:00:58'),(12,2,1,12,1,'2010-04-24 09:05:48'),(13,2,1,13,1,'2010-04-24 09:10:40'),(14,2,1,14,1,'2010-04-24 09:11:36'),(15,2,1,15,1,'2010-04-24 09:14:16'),(16,2,1,16,3,'2010-04-24 09:14:48'),(17,2,1,17,1,'2010-04-24 09:18:04'),(18,2,1,18,1,'2010-04-24 09:18:45'),(19,2,2,19,1,'2010-04-25 07:25:01');
 /*!40000 ALTER TABLE `customer_leads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,7 +212,7 @@ CREATE TABLE `customers` (
   `password` char(12) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -221,7 +221,7 @@ CREATE TABLE `customers` (
 
 LOCK TABLES `customers` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `customers` VALUES (1,'John','Hancock','j.hancock@google.com','100 North Ave',NULL,'Chicago','IL','60605','b','a','2010-04-25 10:39:46','password'),(2,'Peter','Hancock','p.Hancock@gmail.com','10 W 31st street','2 Rear','Chicago','IL','60616','b','a','2010-04-25 03:18:14','pass');
+INSERT INTO `customers` VALUES (1,'John','Hancock','j.hancock@google.com','100 North Ave','2R','Chicago','IL','60605','b','a','2010-04-28 10:02:15','password'),(2,'Peter','Hancock','p.Hancock@gmail.com','12 W 31st street','2 Rear','Chicago','IL','60616','b','a','2010-04-28 08:48:31','pass'),(8,'Stewie','Griffin','stewie@familyguy.com','31 Spooner Street','NA','Quahog','AK','93','i','a','2010-04-27 20:45:56','password'),(9,'Glenn','Quagmire','g.Quagmire@alright.com','27 Spooner Street','NA','Quahog','RI','93','i','a','2010-04-28 03:48:09','password'),(13,'Steve','Jobs','steve@apple.com','Far Far Away','1','Palo Alto','CA','94301','b','a','2010-04-28 05:10:19','password');
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -244,7 +244,7 @@ CREATE TABLE `discounts` (
   PRIMARY KEY (`id`),
   KEY `employee_id` (`employee_id`),
   CONSTRAINT `discounts_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,7 +253,7 @@ CREATE TABLE `discounts` (
 
 LOCK TABLES `discounts` WRITE;
 /*!40000 ALTER TABLE `discounts` DISABLE KEYS */;
-INSERT INTO `discounts` VALUES (1,'Visa Card Holders','2010-04-01','2010-04-21',2,10,'Sales','Visa Platinum'),(2,'Mastercard Customers','2010-04-22','2010-04-30',2,7.5,'Repair','Mastercard Gold'),(3,'Spring Sale!','2010-04-01','2010-05-15',2,7.5,'Sales','Visa,Amex,Mastercard');
+INSERT INTO `discounts` VALUES (1,'Visa Card Holders','2010-04-01','2010-04-21',2,10,'Sales','Visa Platinum'),(2,'Mastercard Customers','2010-04-22','2010-04-30',2,7.5,'Repair','Mastercard Gold'),(3,'Spring Sale!','2010-04-01','2010-05-15',2,7.5,'Sales','Visa,Amex,Mastercard'),(4,'Summer Bonanza','2010-05-03','2010-04-30',2,10,'Sales','Discover Card'),(5,'Summer Bonanza','2010-04-01','2010-06-01',2,10,'Sales','Chase Customers'),(6,'Independance Say Sale','2010-07-01','2010-04-08',2,15,'Sales','All');
 /*!40000 ALTER TABLE `discounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +281,7 @@ CREATE TABLE `employees` (
   UNIQUE KEY `email` (`email`),
   KEY `access_level` (`access_level`),
   CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`access_level`) REFERENCES `access_levels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -290,7 +290,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,'Admini','Strator','admin@pcrs.com','3420 S Cottage Grove','1105','Chicago','IL','60616','2010-04-25 10:40:02','password4',4),(2,'Sally','Pearson','pearson@pcrs.com','232 Fullerton','3F','Chicago','IL','60632','2010-04-25 10:39:26','password3',3);
+INSERT INTO `employees` VALUES (1,'Admini','Strator','admin@pcrs.com','3420 S Cottage Grove','1105','Chicago','IL','60616','2010-04-28 08:48:42','password4',4),(2,'Sally','Pearson','pearson@pcrs.com','232 Fullerton','3F','Chicago','IL','60632','2010-04-28 10:09:49','password3',3),(3,'Peter','Griffin','peter@familyguy.com','31 Spooner Street','NA','Qouhog','RI','93','2010-04-27 21:26:14','password',3),(5,'Sheldon','Cooper','s.cooper@bbt.com','No Idea','4A','Pasadena','CA','91101','2010-04-28 04:25:41','password',3);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,7 +307,7 @@ CREATE TABLE `leads` (
   `type` varchar(12) NOT NULL,
   `status` varchar(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,7 +316,7 @@ CREATE TABLE `leads` (
 
 LOCK TABLES `leads` WRITE;
 /*!40000 ALTER TABLE `leads` DISABLE KEYS */;
-INSERT INTO `leads` VALUES (1,'HP Pavilion Laptop HDD Repair','Repair','Open'),(2,'MS Office 2007 Product Suite','Sales','Open'),(3,'Fedora Core 12','Installation','Open'),(4,'Laptop Fan','Repair','Open'),(5,'Desktop Monitor','Repair','Open'),(6,'Apple MacBook Pro','Sales','Open'),(7,'HP Pavilion Laptop Screen','Repair','Open'),(8,'HP Pavilion Laptop Screen','Repair','Open'),(9,'MS Windows 7','Installation','Open'),(10,'Sony Vaio Laptop','Sales','Open'),(11,'Sony Vaio - OS Crash','Repair','Open'),(12,'Something','Sales','Open'),(13,'Something','Sales','Open'),(14,'Something','Sales','Open'),(15,'Check Power cable dude','Repair','Open'),(16,'Check Power cable dude','Repair','Open'),(17,'Check it out','Sales','Open'),(18,'Check out','Sales','Open'),(19,'LOTR','Sales','Open');
+INSERT INTO `leads` VALUES (1,'HP Pavilion Laptop HDD Repair','Repair','Open'),(2,'MS Office 2007 Product Suite','Sales','Open'),(3,'Fedora Core 12','Installation','Open'),(4,'Laptop Fan','Repair','Open'),(5,'Desktop Monitor','Repair','Open'),(6,'Apple MacBook Pro','Sales','Open'),(7,'HP Pavilion Laptop Screen','Repair','Open'),(8,'HP Pavilion Laptop Screen','Repair','Open'),(9,'MS Windows 7','Installation','Open'),(10,'Sony Vaio Laptop','Sales','Open'),(11,'Sony Vaio - OS Crash','Repair','Open'),(12,'Something New','Sales','Open'),(13,'Something','Sales','Open'),(14,'Something','Sales','Closed'),(15,'Check Power','Repair','Closed'),(16,'Check Power cable dude','Repair','Open'),(17,'Check it out','Sales','Open'),(18,'Check out','Sales','Open'),(19,'LOTR','Sales','Open'),(20,'tests','Sales','Open'),(21,'tests','Sales','Open'),(22,'test','Sales','Open'),(23,'Test','Sales','Open');
 /*!40000 ALTER TABLE `leads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,4 +352,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-04-25 16:56:23
+-- Dump completed on 2010-04-28  5:14:22

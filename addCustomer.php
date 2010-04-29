@@ -24,6 +24,7 @@ get_header();
            $type = "'".$_POST['type']."'" ;
            $password = "'".$_POST['password']."'" ;
 
+
            /*echo "First Name = ",$fName,"<br/>";
            echo "Last Name = ",$lName,"<br/>";
            echo "e Mail = ",$eMail,"<br/>";
@@ -36,32 +37,50 @@ get_header();
            echo "Password = ",$password,"<br/>";
 */
            //$eid = $_POST['eId'] ;
-           
+
            //echo $criteria;
             $db->runQuery("insert into customers values (null,$fName,$lName,$eMail,$street,$suite,$city,$state,$zipCode,$type,'a',null,$password);");
             if($db->result)
             {
-                $_SESSION['msg'] = '<div class="message">Offer Created!</div>';
+                $_SESSION['msg'] = '<div class="message">Customer Profile Created!</div>';
                 $customerID = $db->getLastInsertID();
                 //echo "last insert id = $offerID";
+                if(isset($_POST['bName']))
+                {
+                    $bName = "'".$_POST['bName'] ."'";
+                    $cTitle = "'".$_POST['cTitle'] ."'";
+                    $url = "'".$_POST['url'] ."'";
+                    $db->runQuery("insert into business_customers values($customerID,$bName,$cTitle,$url);");
+                }
+                $_SESSION['msg'] = '<div class="message">Customer Profile Created!</div>';
             }
 
             else
             {
-                    $_SESSION['msg'] = '<div class="message error">Offer Creation Failed!</div>';
+                    $_SESSION['msg'] = '<div class="message error">Customer Profile Creation Failed!</div>';
             }
 
         //echo "last insert id = $offerID <hr/>";
-        $db->runQuery("select * from customers where id = $customerID");
-        $rows = $db->result->fetch_object();
-        $pdata = json_encode($rows);
+        //$db->runQuery("select * from customers where id = $customerID");
+        //$rows = $db->result->fetch_object();
+        //$pdata = json_encode($rows);
        // print_r($pdata);
+if(isset($_POST['bName']))
+    {
+         $db->runQuery(" select c.id as 'Customer ID', c.first_name as 'First Name', c.last_name as 'Last_Name',
+             c.email as 'E-Mail', c.street as Street, c.suite as Suite, c.city as City, c.state as State, c.zipcode as 'Zip Code',
+             c.type as 'Type (b-Business, i-Home)', c.status as 'Status (a-Active,i-Inactive)' , c.last_access as 'Last Accessed On',
+             B.business_name as 'Business Name', B.contact_title as 'Contact Title', B.url as 'URL'
+             from customers C, business_customers B where id = $customerID and c.id = B.customer_id");
+    }
+    else
+        {
      $db->runQuery(" select id as 'Customer ID', first_name as 'First Name', last_name as 'Last_Name',
              email as 'E-Mail', street as Street, suite as Suite, city as City, state as State, zipcode as 'Zip Code',
              type as 'Type (b-Business, i-Home)', status as 'Status (a-Active,i-Inactive)' , last_access as 'Last Accessed On'
              from customers where id = $customerID ");
-
-                    $_SESSION['msg'] = '<div class="message">Offer Created!</div>';
+        }
+                    
                     $columns = $db->result->field_count;
 
         echo "
@@ -206,12 +225,37 @@ get_header();
                     <td>Zip Code</td><td><input name='zipCode' type='text' maxlength = 6/></td>
                 </tr>
          <tr><td><br/></td></tr>
-        <tr>
-                    <td>Type</td><td><select name='type'/><option name='i' value='i' id='i'>Home</option><option name='b' value='b' id='b'>Business</option></td>
-                </tr>
-                <tr><td><br/></td></tr>
 
-            </table>
+
+
+        <tr>
+                    <td>Type</td><td><select name='type' id='type' onChange=\"showBusiness('type','business')\"/><option name='i' value='i' id='i'>Individual</option><option name='b' value='b' id='b'>Business</option></select></td>
+                </tr>
+
+        </table>
+        <div id='business' style='display:none'>
+        <table class='table2'>
+        <tr>
+                <td>Business Name</td><td><input type='text' class='mid' name='bName'/></td>
+            </tr>
+
+            <tr><td><br/></td></tr>
+
+            <tr>
+                <td>Contact Title</td><td><input type='text' class='mid' name='cTitle'/></td>
+            </tr>
+
+            <tr><td><br/></td></tr>
+
+            <tr>
+                <td>Url</td><td><input type='text' class='mid' name='url'/></td>
+            </tr>
+
+            <tr><td><br/></td></tr>
+        </table>
+        </div>
+
+
         </li>
     </ul>
 
@@ -223,7 +267,20 @@ get_header();
 
 
 </body>
+        <script type='text/javascript'>
+        function showBusiness(id,div)
+        {
+            var selectedNode = document.getElementById(id);
+            var showHide = selectedNode.options[selectedNode.selectedIndex].value;
+            if (showHide == 'b')
+                document.getElementById(div).style.display = 'block';
+            else
+                document.getElementById(div).style.display = 'none';
+        //alert(showHide);
+        }
+
+        </script>
+<?
 </html>";
 }
-get_footer();
-?>
+get_footer();?>

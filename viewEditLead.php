@@ -18,8 +18,8 @@ get_header();
 
                 $counter+=1;
                 echo"
-                        <tr align = 'center' id = '$counter' onmouseover = 'changeRowColor(this,true);' onmouseout = 'changeRowColor(this,false);'
-                onclick='pageRedirect($counter);'>
+                        <tr align = 'center' id = '$counter' onmouseover = 'changeRowColor(this,true);'
+                onmouseout = 'changeRowColor(this,false);'onclick='pageRedirect($counter);'>
                             
                             <td>$rows[lead_id]</td>
                             <td>$rows[customer_id]</td>
@@ -98,6 +98,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             {
                                 var lead = document.getElementById('leadsTable').rows[indexOfRow].cells[0].innerHTML;
                                 document.location.href = 'leadUpdate.php?leadID='+lead;
+                                
                             }
                         </script>
                         </head>

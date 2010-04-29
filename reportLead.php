@@ -12,7 +12,8 @@ get_header();
 ?>
 <html>
     <body>
-        <h3> Report Lead Status</h3>
+        <h1> Report Lead Status</h1>
+        <h3> Future Enhancement</h3>
     </body>
 </html>
 

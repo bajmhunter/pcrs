@@ -56,6 +56,8 @@ get_header();
         <h1 id="profile-h1"> <a href="#" id="edit-profile-link">Edit</a></h1>
         <div id="profileBox"></div>
 
+<script type='text/javascript' src='assets/js/jquery.js'></script>
+<script type='text/javascript' src='assets/js/jquery.ui.js'></script>
 
 <script type="text/javascript">
 
@@ -100,7 +102,7 @@ else{        str.push('<tr><td class="field">',keye.capitalize(),'</td> <td>',pd
 }
 function editableDate(keye){
         str.push('<tr><td class="field">',keye.capitalize(),'</td> <td>',pdata[keye],'</td></tr>');
-        st2.push('<tr><td class="field">',keye.capitalize(),'</td><td><input type=text name=',keye,' value="',pdata[keye],'"/></td></tr>');
+        st2.push('<tr><td class="field">',keye.capitalize(),'</td><td><input type=text id=',keye,' value="',pdata[keye],'"/></td></tr>');
 
 }
 
@@ -151,11 +153,13 @@ formhtml += st2.join('');
 $('#profileBox').append( html );
 
 $('#edit-profile-link').click( function(){
-  if( $(this).html() == 'Edit' ){
+  if( $(this).html() == 'Edit' )
+  {
     $(this).html('Cancel');
     $('#profileBox').html(formhtml);
     $('#cancel-edit').click( function(){$('#edit-profile-link').click();} );
-
+    $('#start_date').datepicker({ showOn: 'button', buttonImageOnly: true, buttonImage: 'assets/images/datePicker.gif',dateFormat: 'yy-mm-dd'});
+    $('#end_date').datepicker({ showOn: 'button', buttonImageOnly: true, buttonImage: 'assets/images/datePicker.gif', dateFormat: 'yy-mm-dd'});
   }
   else{
     $('#profileBox').html( html );
@@ -164,6 +168,7 @@ $('#edit-profile-link').click( function(){
 
   return false;
 });
+
 
 </script>
 

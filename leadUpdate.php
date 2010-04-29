@@ -2,7 +2,7 @@
  include('includes/_.php');
  check_auth();
 
-    if ( $_SESSION['access_level'] != 3) {
+    if ( $_SESSION['access_level'] < 3) {
 	die('<h1>Unauthorized</h1>');
         }
 
@@ -50,10 +50,16 @@
 
 
  ?>
-
+<?php
+    if($_SESSION['access_level'] == 3 )
+        {
+?>
         <h1 id="profile-h1"> <a href="#" id="edit-profile-link">Edit</a></h1>
+        
+<?php
+   }
+   ?>
         <div id="profileBox"></div>
-       
 <script type="text/javascript">
 
 showMsg('<?php get_msg(); ?>');

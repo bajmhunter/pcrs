@@ -61,15 +61,7 @@ $record;
  }
 
  
- function errorNotFound()
- {
-    echo "ERROR: Customer NOT found.";
-    echo '<br/><br/><form><input type="submit" value="Try Again" onClick="history.go(-1);return true;"> </form>';
- }
-
-
-
-if ((!isset($_POST['submit1'])) && (!isset($_GET['submit2'])) && (!isset($_GET['customerID'])))
+if ((!isset($_POST['submit1'])) && (!isset($_GET['submit2'])) && (!isset($_GET['customerID'])) && (!isset($_GET['error'])))
     {
 
 
@@ -77,6 +69,7 @@ echo    "
             <!DOCTYPE HTML>
             <html>
                 <body>
+    
                     <form action= '$PHP_SELF' method='POST'>
                         <h1>Search Customer to create Lead</h1><br/>
                             Search Criteria <select id='sType' name='sType'>
@@ -94,7 +87,7 @@ echo    "
             </html>
         ";
 }
-if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
+if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])) && (!isset($_GET['error'])))
     {
         echo"
                 <html>
@@ -120,6 +113,10 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
                                 var customer = document.getElementById('leadsTable').rows[indexOfRow].cells[0].innerHTML;
                                 document.location.href = 'createLead.php?customerID='+customer;
                             }
+                             function errorPage()
+                             {
+                                document.location.href = 'createLead.php?customerID='+customer;
+                             }
                         </script>
                         </head>
                         <body>
@@ -145,7 +142,7 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
                         }
                     else
                         {
-                            errorNotFound();
+                            echo"<script>location.href='createLead.php?error=1'</script>";
                         }
                     break;
 
@@ -158,7 +155,7 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
                         }
                     else
                         {
-                            errorNotFound();
+                            echo"<script>location.href='createLead.php?error=1'</script>";
                         }
                     break;
 
@@ -171,7 +168,7 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
                         }
                     else
                         {
-                            errorNotFound();
+                            echo"<script>location.href='createLead.php?error=1'</script>";
                         }
                     break;
 
@@ -184,7 +181,7 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
                         }
                     else
                         {
-                            errorNotFound();
+                            echo"<script>location.href='createLead.php?error=1'</script>";
                         }
                     break;
 
@@ -198,10 +195,8 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])))
             //$dbnum_rows = $db->result->num_rows;
     }
 
-if(isset($_GET['customerID']))
+if(isset($_GET['customerID']) && (!isset($_GET['error'])))
     {
-
-
     $customerID = $_GET['customerID'];
     $db->runQuery("select first_name,last_name,id from customers where id = $customerID");
     $record = $db->result->fetch_object();
@@ -255,7 +250,7 @@ if(isset($_GET['customerID']))
 
     }
 
-if(isset($_GET['submit2']))
+if(isset($_GET['submit2']) && (!isset($_GET['error'])))
     {
         //echo "here = ";
         $custID = $_GET['custID'];
@@ -321,7 +316,11 @@ if(isset($_GET['submit2']))
        get_footer();
        unset($_SESSION['msg']);
     }
-
+if (isset($_GET['error']))
+    {
+        echo "<h3>ERROR: Not found!</h3>";
+        echo '<br/><br/><form><input type="submit" value="Try Again" onClick="history.go(-1);return true;"> </form>';
+    }
 ?>
 
 

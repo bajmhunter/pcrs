@@ -3,12 +3,17 @@
  check_auth();
  $_SESSION['view'] = 'Edit Employee Information';
 
- //only accessible to sales
+ /*
+* Only Manager Can edit Employees
+*/
  if ( $_SESSION['access_level'] != 4) {
 	die('<h1>Unauthorized</h1>');
  }
 get_header();
 
+/*
+ * Function to display results in a table format returned by the last query.
+ */
  function displayResults($db)
  {
 
@@ -32,14 +37,9 @@ get_header();
 
  }
 
- function errorNotFound()
- {
-    echo "<h5>ERROR: NOT found!</h5>";
-    echo '<br/><br/><form><input type="submit" value="Try Again" onClick="history.go(-1);return true;"> </form>';
- }
 
 
-if((!isset($_POST['submit1']))&& (!isset($_POST['submit2']))&& (!isset($_POST['leadID'])))
+if((!isset($_POST['submit1']))&& (!isset($_POST['submit2']))&& (!isset($_POST['leadID']))&& (!isset($_GET['error'])))
 {
 
 echo    "
@@ -63,7 +63,7 @@ echo    "
     get_footer();
 
         }
-if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['leadID'])))
+if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['leadID']))&& (!isset($_GET['error'])))
     {
      echo
                 "
@@ -120,7 +120,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                         }
                     else
                         {
-                            errorNotFound();
+                             echo"<script>location.href='editEmployee.php?error=1'</script>";
                         }
                     break;
 
@@ -137,7 +137,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                               echo"<script>location.href='editEmployee.php?error=1'</script>";
                             }
                         break;
 
@@ -153,7 +153,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                                echo"<script>location.href='editEmployee.php?error=1'</script>";
                             }
                         break;
 
@@ -169,7 +169,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                             }
                         else
                             {
-                                errorNotFound();
+                                echo"<script>location.href='editEmployee.php?error=1'</script>";
                             }
                         break;
 
@@ -179,4 +179,9 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
                 get_footer();
     }
 
+    if (isset($_GET['error']))
+    {
+        echo "<h3>ERROR: Not found!</h3>";
+        echo '<br/><br/><form><input type="submit" value="Try Again" onClick="history.go(-1);return true;"> </form>';
+    }
 ?>

@@ -3,14 +3,23 @@
  check_auth();
  $_SESSION['view'] = 'Add Employees';
 
- //only accessible to sales
+/*
+* Only Manager Can Add Customers
+*/
  if ( $_SESSION['access_level'] != 4) {
 	die('<h1>Unauthorized</h1>');
  }
 
+ /*
+*  Function call to get the navigation menu and header information
+*/
 get_header();
 
 
+/*
+* If the User has clicked on Submit Button, prepare query and create new customer with the
+* posted information.
+*/
  if(isset($_POST['submit']))
         {
            $fName = "'".$_POST['fName']."'" ;
@@ -23,27 +32,12 @@ get_header();
            $zipCode = $_POST['zipCode'];
            $accessLevel = $_POST['department'] ;
            $password = "'".$_POST['password']."'" ;
-/*
-           echo "First Name = ",$fName,"<br/>";
-           echo "Last Name = ",$lName,"<br/>";
-           echo "e Mail = ",$eMail,"<br/>";
-           echo "street = ",$street,"<br/>";
-           echo "Suite = ",$suite,"<br/>";
-           echo "City = ",$city,"<br/>";
-           echo "State = ",$state,"<br/>";
-           echo "Zip Code = ",$zipCode,"<br/>";
-           echo "Access level (department) = ",$accessLevel,"<br/>";
-           echo "Password = ",$password,"<br/>";
-*/
-           //$eid = $_POST['eId'] ;
 
-           //echo $criteria;
             $db->runQuery("insert into employees values (null,$fName,$lName,$eMail,$street,$suite,$city,$state,$zipCode,null,$password,$accessLevel);");
             if($db->result)
             {
                 $_SESSION['msg'] = '<div class="message">Offer Created!</div>';
                 $customerID = $db->getLastInsertID();
-                //echo "last insert id = $offerID";
             }
 
             else
@@ -51,11 +45,10 @@ get_header();
                     $_SESSION['msg'] = '<div class="message error">Offer Creation Failed!</div>';
             }
 
-        //echo "last insert id = $offerID <hr/>";
         $db->runQuery("select * from employees where id = $customerID");
         $rows = $db->result->fetch_object();
         $pdata = json_encode($rows);
-       // print_r($pdata);
+
      $db->runQuery(" select id as 'Employee ID', first_name as 'First Name', last_name as 'Last_Name',
              email as 'E-Mail', street as Street, suite as Suite, city as City, state as State, zipcode as 'Zip Code',
              access_level as 'Department (2-Employee [Generic], 3-Sales)', last_access as 'Last Accessed On'
@@ -76,12 +69,10 @@ get_header();
        $rows = $db->result->fetch_assoc();
        while($columns>0)
        {
-           //echo $columns;
+           
            $fieldHeader = $db->result->fetch_field_direct($i);
            $fieldName = $fieldHeader->name;
-           //echo $fieldName;
-           //$fieldOrgName = $fieldHeader->orgname;
-           //echo $fieldOrgName;
+           
            echo
            "<tr>
                <td class='field'>$fieldName</td> <td>$rows[$fieldName]</td>
@@ -92,7 +83,9 @@ get_header();
        echo"</li></ul></table></div></body></html>";
        unset($_SESSION['msg']);
         }
-
+/*
+* If the User has NOT clicked on submit. Show the form to create customers
+*/
     else{
             echo"<html>
 

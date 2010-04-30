@@ -3,12 +3,17 @@
  check_auth();
  $_SESSION['view'] = 'Leads';
 
- //only accessible to sales
+/*
+* Only manager or Sales Person can view lead information
+*/
  if ( $_SESSION['access_level'] < 3) {
 	die('<h1>Unauthorized</h1>');
  }
 get_header();
 
+/*
+ * Function to display my Orders in a table format returned by the last query.
+ */
  function displayResults($db)
  {
             
@@ -274,7 +279,7 @@ if((isset($_POST['submit1'])) && (!isset($_POST['submit2'])) && (!isset($_GET['l
 if (isset($_GET['status']) && (!isset($_GET['error'])))
     {
         $status = $_GET['status'];
-        //echo "<h1>$status</h1>";
+        
         echo "<html>
                         <head>
                         <meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />

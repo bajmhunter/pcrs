@@ -1,18 +1,32 @@
 <?php
 
- include('includes/_.php');
- check_auth();
- if( $_SESSION['access_level'] != 1)
-     die("<h1>Unauthorized! Only Customers Allowed</h1>");
- $_SESSION['view'] = 'My Offers';
- $uid = isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : $_SESSION['user_id'];
- if( $_SESSION['access_level'] == 1 && $_SESSION['user_id'] != $uid ) die("Unauthorized!");
- get_header();
- $customerID = $uid;
+    include('includes/_.php');
+    check_auth();
+    
+    /*
+     * Only the customers can view their offers.
+     */
+    if( $_SESSION['access_level'] != 1)
+        die("<h1>Unauthorized! Only Customers Allowed</h1>");
+
+    $_SESSION['view'] = 'My Offers';
+
+    $uid = isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : $_SESSION['user_id'];
+    
+    //A user can only view his offers Not anyone else's
+    if( $_SESSION['access_level'] == 1 && $_SESSION['user_id'] != $uid )
+        die("Unauthorized!");
+    
+    get_header();
+
+    $customerID = $uid;
 ?>
 <?php
 
-if(!isset($_GET['offerID']))
+/*
+ * If the user has not clicked on any offer (initially) show the table of applicable offers
+ */
+if(!isset($_GET['offerID']) && (!isset($_GET['noOffers'])))
     {
 echo "
 
@@ -63,6 +77,8 @@ echo "
             from customer_discounts CD, discounts D where customer_id=$customerID and CD.discount_id = D.id;");
 
         $counter=0;
+        if($db->result->num_rows == 0 )
+            echo"<script>location.href='myOffers.php?noOffers=1'</script>";
         while($rows = $db->result->fetch_row())
         {
             $counter+=1;
@@ -73,13 +89,17 @@ echo "
                                     <td>  $rows[2]  </td>
                                     <td>  $rows[3]  </td>
                                 </tr>";
-            //print_r($rows);
+        
         }
 
 }
-if(isset($_GET['offerID']))
+
+/*
+ * Show the details of the offer once the customer selects it from the list
+ */
+if(isset($_GET['offerID']) && (!isset($_GET['noOffers'])))
     {
-   // echo"<h1>I AM HERE</h1>";
+  
         $offerID = $_GET['offerID'];
        
                 $db->runQuery("select CD.discount_id, CD.date,
@@ -89,7 +109,7 @@ if(isset($_GET['offerID']))
                                 and CD.customer_id = $customerID;
                                 ");
                 $rows = $db->result->fetch_assoc();
-        //    print_r($rows);
+  
         echo
                 "
                     <div id='profileBox'></div>
@@ -104,17 +124,14 @@ if(isset($_GET['offerID']))
                         <tr><td class='field'>Offered On</td><td>$rows[date]</td></tr>
                         </table>
 
-
-
-
-
 ";
-                    
+   }
+   if (isset($_GET['noOffers']))
+    {
+         echo "<h2>You donot have any Offers yet.</h2>";
 
-
-                    
-
-   } ?>
+    }
+   ?>
 
    <?php echo "</table></form></body></html>";
 get_footer(); ?>

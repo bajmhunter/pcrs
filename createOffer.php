@@ -1,36 +1,41 @@
 <?php
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 include('includes/_.php');
  check_auth();
  $_SESSION['view'] = 'Create Offers';
 
- //only accessible to sales
+/*
+* Only Sales Person Can Add Customers
+*/
   if ( $_SESSION['access_level'] != 4) {
 	die('<h1>Unauthorized</h1>');
  }
 
-
+/*
+*  Function call to get the navigation menu and header information
+*/
 get_header();
 
+/*
+* If the User has clicked on Submit Button, prepare query and create new offer with the
+* posted information.
+*/
  if(isset($_POST['submit']))
         {
            $desc = "'".$_POST['desc']."'" ;
            $sdate = "'".$_POST['sDate']."'" ;
            $edate = "'".$_POST['eDate']."'" ;
-           //$eid = $_POST['eId'] ;
+           
            $value = $_POST['value'] ;
            $criteria = "'".$_POST['criteria']."'" ;
            $leadtype = "'".$_POST['lType']."'";
-           //echo $criteria;
+           
             $db->runQuery("insert into discounts values (null,$desc,$sdate,$edate,2,$value,$leadtype,$criteria);");
             if($db->result)
             {
                 $_SESSION['msg'] = '<div class="message">Offer Created!</div>';
                 $offerID = $db->getLastInsertID();
-                //echo "last insert id = $offerID";
+           
             }
 
             else
@@ -38,11 +43,11 @@ get_header();
                     $_SESSION['msg'] = '<div class="message error">Offer Creation Failed!</div>';
             }
         
-        //echo "last insert id = $offerID <hr/>";
+        
         $db->runQuery("select * from discounts where id = $offerID");
         $rows = $db->result->fetch_object();
         $pdata = json_encode($rows);
-       // print_r($pdata);
+       
      $db->runQuery(" select id as 'Offer ID', description as Description, value as Value,lead_type as 'Lead Type',
               criteria as Criteria,start_date as 'Start Date', end_date as 'End Date', employee_id as 'Employee ID'
              from discounts where id = $offerID ");
@@ -62,12 +67,10 @@ get_header();
        $rows = $db->result->fetch_assoc();
        while($columns>0)
        {
-           //echo $columns;
+           
            $fieldHeader = $db->result->fetch_field_direct($i);
            $fieldName = $fieldHeader->name;
-           //echo $fieldName;
-           //$fieldOrgName = $fieldHeader->orgname;
-           //echo $fieldOrgName;
+           
            echo
            "<tr>
                <td class='field'>$fieldName</td> <td>$rows[$fieldName]</td>
@@ -79,7 +82,9 @@ get_header();
        get_footer();
        unset($_SESSION['msg']);
         }
-
+/*
+* If the User has NOT clicked on submit. Show the form to create customers
+*/
     else{
             echo"<html>
 

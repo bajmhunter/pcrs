@@ -1,13 +1,10 @@
 <?php
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 include('includes/_.php');
  check_auth();
  $_SESSION['view'] = 'Offer Discounts';
 
- //only accessible to sales
+ 
 if ( $_SESSION['access_level'] != 3) {
 	die('<h1>Unauthorized</h1>');
  }
@@ -75,14 +72,13 @@ if(isset($_GET['pastOfferID']) && (!isset($_POST['submit'])))
     {
         fetchOffer($_GET['pastOfferID']);
         echo "<h2> The offer has expired. It cannot be offered to any customer </h2>";
-        //$offerID = $_GET['offerID'];
-        //displayResults($db,$offerID,'past');
+        
     }
 
 function displayResults($db,$offerID,$message)
             {
 $today = date("Y-m-d");
-//global $activeCustomersArray;
+
 $db->runQuery("select DISTINCT customer_id from customer_leads;");
 $counter=0;
 if($db->result->num_rows > 0)
@@ -93,8 +89,7 @@ if($db->result->num_rows > 0)
             }
             for($i=0;$i<$counter;$i++)
             {
-//                echo $i;
-//              print_r($activeCustomersArray[$i]);
+
                 $db->runQuery("select count(*) customer_id from customer_leads where customer_id = $activeCustomersArray[$i]");
                 if($db->result->num_rows > 0)
                         {
@@ -118,13 +113,13 @@ $db->runQuery("select id,criteria from discounts where id = $offerID and start_d
                 {
                     if($thisCustomerLeads[$i]['totalLeads'] >= $criteria)
                     {
-                        //eligible;
+                        
                         $eligibleCustomers [$i] = $thisCustomerLeads[$i]['customerID'];
                         $eligibleCustomersCounter++;
                     }
                     else
                     {
-                         //not eligible;
+                        
                         $notEligibleCustomers [$i]= $thisCustomerLeads[$i]['customerID'];
                     }
                 }
@@ -210,15 +205,15 @@ else
 
 if(isset($_POST['submit']))
     {
-        //echo "Offer ID = ",
+        
         
         $discountID = $_GET['offerID'];
-        //echo "eCC Counter = ",
+        
 
         $eligibleCustomersCounter = $_POST['eCC'];
-        //echo $_POST['emp'];
+        
 
-        //echo "Employee ID =",
+        
         $employeeID = $_SESSION['user_id'];
 
         for ($i=0;$i<$eligibleCustomersCounter;$i++)

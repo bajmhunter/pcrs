@@ -2,6 +2,9 @@
  include('includes/_.php');
  check_auth();
 
+    /*
+     * Only manager or Sales Person can update customer information
+     */
     if ( $_SESSION['access_level'] < 3) {
 	die('<h1>Unauthorized</h1>');
         }
@@ -10,7 +13,10 @@
 
         $custID = $_GET['custID'];
         $empID = $_SESSION['user_id'];
-
+/*
+ * If the user has Clicked the update button, prepare the query and update records based on the
+ * values posted
+ */
         if( $_GET['action'] == 'Update' )
         {
             $fName = $_GET['first_name'];
@@ -43,15 +49,16 @@
         $rows = $db->result->fetch_object();
         $pdata = json_encode($rows);
 
-        //print_r($pdata);
-
+       
 
 
  ?>
 
         <h1 id="profile-h1"> <a href="#" id="edit-profile-link">Edit</a></h1>
         <div id="profileBox"></div>
-
+<!--
+JavaScript to toggle display between Edit and Cancel Views to update the customer profile.
+-->
 <script type="text/javascript">
 
 showMsg('<?php get_msg(); ?>');

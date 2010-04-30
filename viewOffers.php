@@ -1,17 +1,17 @@
 <?php
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 include('includes/_.php');
  check_auth();
  $_SESSION['view'] = 'View Offers';
  
- //only accessible to sales
+
   
 global $db;
 get_header();
-    
+
+/*
+ * Show all the ongoing and past offers
+ */
 $db->runQuery(" select id as 'Offer ID', description as Description, value as Value,lead_type as 'Lead Type',
               criteria as Criteria,start_date as 'Start Date', end_date as 'End Date', employee_id as 'Employee ID'
              from discounts order by end_date");
@@ -75,8 +75,7 @@ $db->runQuery(" select id as 'Offer ID', description as Description, value as Va
     if((!isset($_GET['offerID'])) && (!isset($_POST['past'])) && (!isset($_POST['upcoming'])))
     {
 
-        /* show on-going offers */
-
+       
 
          if(isset($_GET['offerDiscounts']))
              echo"<h1>Select offer to see elgible customers</h1>";
@@ -113,7 +112,7 @@ $db->runQuery(" select id as 'Offer ID', description as Description, value as Va
        while ($rows = $db->result->fetch_assoc())
        {
             $eDate = $rows['End Date'];
-            //echo "End Date = ",$eDAte;
+            
             $sDate = $rows['Start Date'];
            if($eDate >= $today && $sDate<=$today)
            {
@@ -121,7 +120,7 @@ $db->runQuery(" select id as 'Offer ID', description as Description, value as Va
                     $accessLevel = $_SESSION['access_level'];
                     echo"<tr align = 'center' id = '$counter' onmouseover = 'changeRowColor(this,true);' onmouseout = 'changeRowColor(this,false);'
                          onClick='pageRedirect(\"offersTable\",$counter,$accessLevel);'>";
-                   // echo $counter;
+                   
                     while($i<$columns)
                     {
                             $fieldHeader = $db->result->fetch_field_direct($i);
@@ -157,12 +156,10 @@ $db->runQuery(" select id as 'Offer ID', description as Description, value as Va
        echo"<tr align = 'center'>";
        while($columns>0)
        {
-           //echo $columns;
+           
            $fieldHeader = $db->result->fetch_field_direct($i);
            $fieldName = $fieldHeader->name;
-           //echo $fieldName;
-           //$fieldOrgName = $fieldHeader->orgname;
-           //echo $fieldOrgName;
+           
            echo
            "<th class='field'>$fieldName</th>";
             $columns--;
@@ -224,12 +221,10 @@ $db->runQuery(" select id as 'Offer ID', description as Description, value as Va
        echo"<tr align = 'center'>";
        while($columns>0)
        {
-           //echo $columns;
+           
            $fieldHeader = $db->result->fetch_field_direct($i);
            $fieldName = $fieldHeader->name;
-           //echo $fieldName;
-           //$fieldOrgName = $fieldHeader->orgname;
-           //echo $fieldOrgName;
+           
            echo
            "<th class='field'>$fieldName</th>";
             $columns--;
@@ -248,8 +243,7 @@ $db->runQuery(" select id as 'Offer ID', description as Description, value as Va
        while ($rows = $db->result->fetch_assoc())
        {
             $sDate = $rows['Start Date'];
-            //echo "End Date = ",$eDAte;
-            //echo "start = ",$sDate,"and today =",$today,"<br/>";
+            
            if($sDate > $today)
            {
                     $i=0;$counter+=1;
@@ -325,4 +319,3 @@ if(isset($_GET['offerID']))
 echo"</body></html>";
 get_footer();
 ?>
-<!--<div id='profileBox'>-->

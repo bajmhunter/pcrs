@@ -1,13 +1,12 @@
 <?php
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 include('includes/_.php');
  check_auth();
  $_SESSION['view'] = 'Edit Offer';
 
- //only accessible to sales
+/*
+* Only Manager Can edit discounts
+*/
   if ( $_SESSION['access_level'] != 4) {
 	die('<h1>Unauthorized</h1>');
  }
@@ -16,7 +15,10 @@ include('includes/_.php');
 get_header();
 
         $offerID = $_GET['offerID'];
-
+    /*
+     * If the User has clicked on Submit Button, prepare query and create new customer with the
+     * posted information.
+     */
         if( $_GET['action'] == 'Update' )
         {
             $offeriD = $_GET['id'];
@@ -48,14 +50,16 @@ get_header();
         $rows = $db->result->fetch_object();
         $pdata = json_encode($rows);
 
-        //print_r($pdata);
+
 
 
 
  ?>
         <h1 id="profile-h1"> <a href="#" id="edit-profile-link">Edit</a></h1>
         <div id="profileBox"></div>
-
+<!--
+JavaScript to toggle display between Edit and Cancel Views to update the Discount Information.
+-->
 <script type='text/javascript' src='assets/js/jquery.js'></script>
 <script type='text/javascript' src='assets/js/jquery.ui.js'></script>
 

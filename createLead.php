@@ -3,42 +3,30 @@
  check_auth();
  $_SESSION['view'] = 'Leads';
 
- //only accessible to sales
+/*
+* Only Sales Person Can Add Leads
+*/
  if ( $_SESSION['access_level'] != 3) {
 	die('<h1>Unauthorized</h1>');
  }
 
+ /*
+ *  Function call to get the navigation menu and header information
+ */
 get_header();
 
-//employee ID
+
 $empID = $_SESSION['user_id'];
 $record;
 
 
-/*function singleResult($db)
- {
-    
-    $record = $db->result->fetch_object();
-    echo"<form action ='$PHP_SELF' method='POST'>";
-    echo "<h5>Enter Lead Details for $record->first_name $record->last_name</h5>";
 
-    $db->runQuery("select id from customers where last_name = '$record->last_name' and first_name = '$record->first_name';");
-    $record = $db->result->fetch_object();
-    $custID = $record->id;
-    echo "<input type ='hidden' name ='Customer' value=$custID";
-  
- }
-*/
+/*
+ * Function to display results in a table format returned by the last query.
+ */
  function displayResults($db)
  {
-            /*echo"<form action ='$PHP_SELF' method='POST'>";
-            echo "Select Customer <select id='Customer' name='Customer'>";
-            while($rows = $db->result->fetch_assoc())
-            {
-                echo"<option value='$rows[id]'>$rows[first_name] $rows[last_name]</option>";
-            }
-         echo "</select>";*/
-         
+          
              $counter=0;
             while($rows = $db->result->fetch_assoc())
             {
@@ -192,7 +180,7 @@ if((isset($_POST['submit1'])) && (!isset($_GET['submit2'])) && (!isset($_GET['er
         echo"</table></form>";
         echo"</body></html>";
         get_footer();
-            //$dbnum_rows = $db->result->num_rows;
+            
     }
 
 if(isset($_GET['customerID']) && (!isset($_GET['error'])))
@@ -252,23 +240,17 @@ if(isset($_GET['customerID']) && (!isset($_GET['error'])))
 
 if(isset($_GET['submit2']) && (!isset($_GET['error'])))
     {
-        //echo "here = ";
+        
         $custID = $_GET['custID'];
-        //echo $custID;
+        
         $lType = "'".$_GET['ltype']."'";
         $desc = "'".$_GET['txt']."'";
-        //echo $custID,$lType,$desc;
+        
         $db->runQuery("insert into leads values (null,$desc,$lType,'Open');");
         $lastLeadID = $db->getLastInsertID();
 
 
-/*          Dunno why this seems to malfunction at times! will have a look later!
-*
-*          $db->runQuery("select id from leads where last_insert_id() = $lastID");
-*          $rec = $db->result->fetch_object();
-*          $leadID = $rec->id;
-*          echo " leadID = ";echo $leadID;
-*/
+
         $db->runQuery("insert into customer_leads values(null,$empID,$custID,$lastLeadID,1,null);");
         $lastID = $db->getLastInsertID();
         $db->runQuery("select first_name, last_name from customers C, customer_leads CL where CL.id = $lastID and CL.customer_id = C.id");
@@ -288,7 +270,7 @@ if(isset($_GET['submit2']) && (!isset($_GET['error'])))
                     $columns = $db->result->field_count;
 
         echo "
-                    <!--<body onload='displayLead()'>-->
+                    
                         <div id='profileBox'></div>
                         <h3>Lead Created!</h3>
                         
@@ -299,12 +281,10 @@ if(isset($_GET['submit2']) && (!isset($_GET['error'])))
        $rows = $db->result->fetch_assoc();
        while($columns>0)
        {
-           //echo $columns;
+          
            $fieldHeader = $db->result->fetch_field_direct($i);
            $fieldName = $fieldHeader->name;
-           //echo $fieldName;
-           //$fieldOrgName = $fieldHeader->orgname;
-           //echo $fieldOrgName;
+           
            echo
            "<tr>
                <td class='field'>$fieldName</td> <td>$rows[$fieldName]</td>

@@ -21,6 +21,12 @@ if( isset( $_GET['action'] ) ){
 			addComplaint();
 			exit();
 			break;
+			
+		case 'update_complaint' :
+			updateComplaint();
+			exit();
+			break;
+		
 
 		default :
 			listComplaints();
@@ -81,6 +87,27 @@ function addComplaint(){
 	//if($ajaxmode) exit();
 }
 
+function updateComplaint(){
+	global $db, $cust_id, $response, $ajaxmode;
+	$id = $_GET['id'];
+	$new_stat = $_GET['stat'];
+	//UPDATE  `pcrs`.`customer_complaints` SET  `status` =  '1' WHERE  `customer_complaints`.`id` =2;
+	$query = "update customer_complaints set status = '$new_stat' where id = $id;";
+	
+	$db->runQuery($query);
+	if($db->result){
+		$response->status= 1;
+		$response->text = '<div class="message">Complaint updated</div>';
+	}
+	else{
+		$response->status = 0;
+		$response->text = '<div class="message error">Error updating complaint</div>';
+	}
+	echo json_encode($response);
+	exit();
+	
+}
+
 function listComplaints(){
 	global $db, $cust_id, $response, $ajaxmode;
 
@@ -104,6 +131,11 @@ Q;
 		$cust = ($_SESSION['access_level'] == 4) ? '| by <a href="profile.php?domain=customers&id='.$row->cid.'">'.$row->fullname.'</a>' : '';
 		$curr->info .= '<small>'. mysql_to_date( $row->time ) .$cust.'</small></div>';
 		$curr->info .= '<p>'.$row->details.'</p>';
+		if( $_SESSION['access_level'] == 4 ){
+			$axn = ($row->status==1) ? 'Close Complaint' : 'Re-open Complaint';
+			$curr->ctrl = '<p><a href="#" class="update" rel="'.$row->id.'">'.$axn.'</a></p>';
+		}
+		else $curr->ctrl = '';
 		$list[] = $curr;
 		unset($curr);
 	}
@@ -153,7 +185,7 @@ if( data['History'].length == 0 )
 	
 for(var i=0; i<data['History'].length;  i++){
 	var curr = data['History'][i];
-	list.push('<li class="',curr['stat'],'">',curr['info'],'</li>');
+	list.push('<li id="',curr['id'],'" class="',curr['stat'],'">',curr['info'],curr['ctrl'],'</li>');
 }
 list.push('</ul>');
 ogHTML += list.join('');
@@ -214,6 +246,30 @@ function doACS(){
 	});
 	return false;
 }
+
+$('.update').click(function (){
+	var nstatus = 0; //closed stat
+	if($(this).text() == 'Re-open Complaint') nstatus = 1;
+	
+	var id = $(this).attr('rel');
+	var arg = 'complaints.php?&action=update_complaint&ajaxmode=1&stat='+nstatus+'&id='+id;
+
+	
+	$.getJSON(arg,{},function(response){
+
+		if(response.status==1){
+			showMsg(response.text);
+			setTimeout('window.location.reload()',3000);
+			$('#complaint-'+id).toggleClass('open');
+			if( nstatus == 1 ) $(this).text('Close Complaint');
+			else $(this).text('Re-open Complaint');
+		}
+		else{
+			showMsg(response.text);
+		}
+	});
+	return false;
+});
 </script>
 
 

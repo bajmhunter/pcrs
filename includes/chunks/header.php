@@ -38,26 +38,26 @@ global $db;
                     <?php endif;?>
 
                     <?php if( $_SESSION['access_level'] == 1) : ?>
-                    <li><a href="complaints.php"><span class="notice">
+                    <li><a href="complaints.php">
                                 <?php
 
                             $customerID = $_SESSION['user_id'];
     $db->runQuery("select count(*) as count from customer_complaints where status='1' and customer_id=$customerID;");
     $rows = $db->result->fetch_assoc();
-    echo $rows['count'];
+    if($rows['count'] > 0 ) echo '<span class="notice">'.$rows['count'].'</span>';
 ?>
-                      </span>Complaints</a></li>
+                      Complaints</a></li>
                           <?php endif; ?>
 <?php if( $_SESSION['access_level'] == 4) : ?>
-                    <li><a href="complaints.php"><span class="notice">
+                    <li><a href="complaints.php">
                                 <?php
 
                             $customerID = $_SESSION['user_id'];
     $db->runQuery("select count(*) as count from customer_complaints where status='1';");
     $rows = $db->result->fetch_assoc();
-    echo $rows['count'];
+    if($rows['count'] > 0 ) echo '<span class="notice">'.$rows['count'].'</span>';
 ?>
-                            </span>Complaints</a></li>
+                            Complaints</a></li>
                     <?php endif; ?>
 
                     <?php if( $_SESSION['access_level'] == 1 ) : ?>

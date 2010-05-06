@@ -14,21 +14,23 @@ $ajaxmode = (isset($_GET['ajaxmode']) ) ? true : false;
 //response
 $response = new stdClass();
 
+if( isset( $_GET['action'] ) ){
+	switch($_GET['action']){
 
-switch($_GET['action']){
+		case 'add_complaint' :
+			addComplaint();
+			exit();
+			break;
 
-	case 'add_complaint' :
-		addComplaint();
-		exit();
-		break;
+		default :
+			listComplaints();
+			break;
 
-	default :
-		listComplaints();
-		break;
-
+	}
 }
-
-
+else{
+	listComplaints();
+}
 /*-------------------------------------------------------------
     @name:    getComplaint
     @purpose: Returns a single complaint specified by its id
@@ -114,17 +116,18 @@ Q;
 
 
 if( $_SESSION['access_level'] == 1 ){
-	$response->Add = <<<ADDFORM
+$response->Add = <<<ADDFORM
 <h3>File a new complaint</h3>
 <form id="acf" class="form1" action="#">
+<div id="errors"></div>
 <ul>
 <li>
 <label>Subject</label>
-<input type="text" class="full" name="title"/>
+<input type="text" class="full" name="title" id="title"/>
 </li>
 <li>
 <label>Details</label>
-<textarea name="details"></textarea>
+<textarea name="details" id="details"></textarea>
 </li>
 <li>
 <input type="hidden" action="add_complaint" />
@@ -145,6 +148,9 @@ var data = <?php echo json_encode( $response ); ?>;
 var list = ['<ul class="complaint-list">'];
 var ogHTML = '';
 
+if( data['History'].length == 0 )
+	list.push('<li><h3 style="text-align:center">You have not filed any complaints</h3></li>');
+	
 for(var i=0; i<data['History'].length;  i++){
 	var curr = data['History'][i];
 	list.push('<li class="',curr['stat'],'">',curr['info'],'</li>');
@@ -169,14 +175,35 @@ else{
 /*Submit add complaints form*/
 $('#acf').submit( doACS );
 function doACS(){
-	alert('Yes');
-	return;
-	//todo error checking
+
+	$title = $('#title');
+	$details = $('#details');
+	$errorDiv = $('#errors').toggle();
+	$form = $('#acf');
+	var Errors = [];
+
+	//clear form
+	$('input, textarea', $form).removeClass("invalid").each( function(){
+		$(this).val( $.trim( $(this).val() ) );
+	});
+
+	if( $title.val().length < 5 ){
+		Errors.push('<li>Please enter a more descriptive title</li>');
+		$title.addClass('invalid');
+	}
+	if( $details.val().length < 20 ){
+		Errors.push('<li>Please enter a more details</li>');
+		$details.addClass('invalid');
+	}
+	if( Errors.length > 0 ){
+		$errorDiv.html( '<div class="error-list"><h5>' + Errors.length + ' error(s) encountered!</h5><ul>' + Errors.join('') + '</ul></div>' ).show();
+		return false;
+	}
+	
 	var arg = 'complaints.php?' + $('#acf').serialize() + '&action=add_complaint&ajaxmode=1';
 	$.getJSON(arg,{},function(response){
 
 		if(response.status==1){
-			console.log(response.text);
 			showMsg(response.text);
 			$('#acf')[0].reset();
 			setTimeout('window.location.reload()',3000);

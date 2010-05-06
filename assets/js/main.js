@@ -7,21 +7,10 @@ google.setOnLoadCallback( function() {
 
 */
 
-$(function(){ main() });
 
-function main(){
-
-}
 
 //reference: will be needed for each instance
-function date_fields(){
-	 $('.date-field').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        dateFormat: 'yy-mm-dd',
-        yearRange: '2000:'
-    });
-}
+
 
 function showMsg(str){
   $('#body').append(str);
